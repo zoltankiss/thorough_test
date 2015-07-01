@@ -17,11 +17,11 @@ class ThoroughTest
       select { |line| line.match(/modified:/) && line.match(/spec\.rb$/) }.
       map { |l| l.match(/modified:   (.*rb)$/)[1] }
     @has_failures = !!`cd #{path} && rspec #{@spec_files.join(' ')}`.match(/Failures:/)
-    `git reset --hard`
-    `git cherry-pick #{head_hash}`
+    `cd #{path} && git reset --hard`
+    `cd #{path} && git cherry-pick #{head_hash}`
   end
 
-  def has_failed_without_the_latest_code?
+  def latest_commits_code_was_written_by_having_failing_test_first?
     @has_failures
   end
 end

@@ -5,3 +5,7 @@ This is valuable information since if your new tests pass on the old code,
 chances are they aren't testing what they should be.
 
 example usage: `bin/thorough_test <path_to_dir>`
+
+# How to run the test suite
+
+you need to un-zip the sample projects needed for the rspec suite.

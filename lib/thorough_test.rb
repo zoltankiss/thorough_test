@@ -10,7 +10,7 @@ class ThoroughTest
       select { |line| line.match(/modified:/) && !line.match(/spec\.rb$/) }.
       map { |l| l.match(/modified:   (.*rb)$/)[1] }
     `cd #{path} && git reset HEAD`
-    files.each { |file| `cd #{path} && git checkout #{@non_spec_files}` }
+    @non_spec_files.each { |file| `cd #{path} && git checkout #{file}` }
     @spec_files = (`cd #{path} && git status`).
       split("\n").
       map(&:strip).

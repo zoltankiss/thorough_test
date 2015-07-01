@@ -6,13 +6,18 @@ class ThoroughTest
     `cd #{@path} && git cherry-pick -n #{head_hash}`
     `cd #{@path} && git reset HEAD`
     non_spec_files.each { |file| `cd #{@path} && git checkout #{file}` }
-    @has_failures = !!`cd #{@path} && rspec #{spec_files.join(' ')}`.match(/Failures:/)
+    @has_failures = tests_passed?
     `cd #{@path} && git reset --hard`
     `cd #{@path} && git cherry-pick #{head_hash}`
+    @has_failures_in_current_project_state = tests_passed?
   end
 
   def latest_commits_code_was_written_by_having_failing_test_first?
     @has_failures
+  end
+
+  def passed_test_suite?
+    @has_failures_in_current_project_state
   end
 
   private
@@ -30,5 +35,9 @@ class ThoroughTest
         map(&:strip).
         select { |line| line.match(/modified:/) && line.match(/spec\.rb$/) }.
         map { |l| l.match(/modified:   (.*rb)$/)[1] }
+    end
+
+    def tests_passed?
+      !`cd #{@path} && rspec #{spec_files.join(' ')}`.match(/Failures:/)
     end
 end

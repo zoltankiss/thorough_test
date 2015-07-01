@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+
+unless ARGV.length == 1
+  raise 'example usage: ./thorough_test <project_path>'
+end
+
+require File.expand_path('../../lib/thorough_test', __FILE__)
+
+test = ThoroughTest.new(ARGV[0])
+
+puts 'test report:'
+puts '------------'
+
+
+if test.latest_commits_code_was_written_by_having_failing_test_first?
+  puts "congrats! your current commit's tests fail on the code written before"
+  puts "your current commit. This means that you have some assurance that your"
+  puts "tests are working. If your current commit's tests were passing on"
+  puts "the previous code, that would mean they aren't doing a very good testing the"
+  puts "new feature."
+else
+  puts "unfortunately your current commit's tests pass on the code written before"
+  puts "your current commit. This means that your tests are really working:"
+  puts "the whole point of the new tests is to test if your new feature is done."
+  puts "Since they pass on the previous code your tests are saying that the previous"
+  puts "code has the new feature, which is clearly not true."
+end
+
+puts "-------------------------------------------------------------------------"
+
+if test.passed_test_suite?
+  puts "your test suite passed!"
+else
+  puts "unfortunately your test suite did not pass"
+end
